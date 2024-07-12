@@ -47,8 +47,19 @@ function extractFileId(url) {
 }
 
 function setupTrigger() {
+  // Delete any existing triggers to avoid duplicates
+  ScriptApp.getProjectTriggers().forEach(trigger => {
+    ScriptApp.deleteTrigger(trigger);
+  });
+
   ScriptApp.newTrigger('logSharedSheets')
     .timeBased()
+    .after(1000) // immediately run after milliseconds. not exact, will vary
+    .create();
+  
+  ScriptApp.newTrigger('logSharedSheets')
+    .timeBased()
+    .atHour(8)
     .everyDays(1)
     .create();
 }
